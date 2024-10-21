@@ -7,5 +7,9 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   root "tasks#api_message"
-  resources :tasks
+  post "/tasks/get_all_tasks", to: "tasks#get_all_tasks"
+  post "/tasks/get_a_task", to: "tasks#get_a_task"
+  post "/tasks/create", to: "tasks#create"
+  post "/tasks/edit", to: "tasks#edit"
+  post "/tasks/delete", to: "tasks#delete"
 end

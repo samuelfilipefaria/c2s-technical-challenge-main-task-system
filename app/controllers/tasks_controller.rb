@@ -4,17 +4,61 @@ class TasksController < ActionController::API
   end
 
   def get_all_tasks
+    tasks = Task.all
+    render json: tasks
   end
 
   def get_a_task
+    task = Task.find(params[:id])
+
+    if task
+      render json: tag
+    else
+      render json: {error: "Tarefa não encontrada!"}
+    end
   end
 
   def create
+    new_task = Tag.new(
+      description: params[:description],
+      user_id: params[:user_id],
+      state: params[:state],
+      type: params[:type],
+      url_for_scraping: params[:url_for_scraping],
+    )
+
+    if new_task.save
+      render json: new_task
+    else
+      render json: {error: "Erro ao criar tarefa!"}
+    end
   end
 
   def edit
+    task = Task.find(params[:id])
+
+    unless task
+      render json: {error: "Tarefa não encontrada!"}
+      return
+    end
+
+    task.update(
+      description: params[:description],
+      user_id: params[:user_id],
+      state: params[:state],
+      type: params[:type],
+      url_for_scraping: params[:url_for_scraping],
+    )
   end
 
   def delete
+    task = Task.find(params[:id])
+
+    unless task
+      render json: {error: "Tarefa não encontrada!"}
+      return
+    end
+
+    task.destroy
   end
 end
