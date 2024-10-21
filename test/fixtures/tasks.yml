@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  description: MyString
+  user_id: MyString
+  state: MyString
+  type: 
+  url_for_scraping: MyString
+
+two:
+  description: MyString
+  user_id: MyString
+  state: MyString
+  type: 
+  url_for_scraping: MyString
