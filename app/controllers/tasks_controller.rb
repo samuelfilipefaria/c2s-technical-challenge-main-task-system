@@ -52,7 +52,7 @@ class TasksController < ActionController::API
   end
 
   def delete
-    task = Task.find(params[:id])
+    task = Task.find(params[:task_id])
 
     unless task
       render json: {error: "Tarefa não encontrada!"}
