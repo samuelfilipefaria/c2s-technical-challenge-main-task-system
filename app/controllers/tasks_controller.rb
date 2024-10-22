@@ -3,8 +3,8 @@ class TasksController < ActionController::API
     render json: {message: "Olá! Este é o microserviço para TAREFAS"}
   end
 
-  def get_all_tasks
-    tasks = Task.all
+  def get_all_user_tasks
+    tasks = Task.where(user_id: params[:token])
     render json: tasks
   end
 
@@ -19,11 +19,11 @@ class TasksController < ActionController::API
   end
 
   def create
-    new_task = Tag.new(
+    new_task = Task.new(
       description: params[:description],
       user_id: params[:user_id],
       state: params[:state],
-      type: params[:type],
+      task_type: params[:task_type],
       url_for_scraping: params[:url_for_scraping],
     )
 
