@@ -51,6 +51,15 @@ class TasksController < ActionController::API
         task_id: new_task.id,
         scraped_data: "",
       }.to_json, headers: { 'Content-Type' => 'application/json' })
+
+      if new_task.task_type == "Web Scraping"
+        HTTParty.post('http://web_scraping_microservice_api:7000/scrape_data', body: {
+          token: params[:token],
+          task_id: new_task.id,
+          url_for_scraping: new_task.url_for_scraping,
+        }.to_json, headers: { 'Content-Type' => 'application/json' })
+      end
+
     else
       send_response("Error creating task!", 500)
     end
