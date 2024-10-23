@@ -44,6 +44,13 @@ class TasksController < ActionController::API
 
     if new_task.save
       send_response("Task created!", 201)
+      HTTParty.post('http://notification_microservice_api:2000/send_notification', body: {
+        token: params[:token],
+        task_description: new_task.description,
+        operation: "created",
+        task_id: new_task.id,
+        scraped_data: "",
+      }.to_json, headers: { 'Content-Type' => 'application/json' })
     else
       send_response("Error creating task!", 500)
     end
@@ -65,6 +72,13 @@ class TasksController < ActionController::API
     )
 
     send_response("Task updated!", 200)
+    HTTParty.post('http://notification_microservice_api:2000/send_notification', body: {
+      token: params[:token],
+      task_description: task.description,
+      operation: "edited",
+      task_id: task.id,
+      scraped_data: "",
+    }.to_json, headers: { 'Content-Type' => 'application/json' })
   end
 
   def delete
