@@ -1,5 +1,5 @@
 services:
-  db:
+  main_task_system_db:
     image: mysql
     restart: always
     ports:
@@ -7,8 +7,10 @@ services:
     environment:
       - MYSQL_DATABASE=c2s_technical_challenge_users_tasks
       - MYSQL_ROOT_PASSWORD=root
+    networks:
+      - main-task-system-network
 
-  api:
+  main_task_system_api:
     build:
       context: .
       dockerfile: Dockerfile
@@ -18,4 +20,10 @@ services:
     ports:
       - "3000:3000"
     depends_on:
-      - db
+      - main_task_system_db
+    networks:
+      - main-task-system-network
+
+networks:
+  main-task-system-network:
+    driver: bridge
