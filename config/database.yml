@@ -15,7 +15,7 @@ default: &default
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   username: root
   password: "root"
-  host: <%= ENV.fetch("DB_HOST") { "db" } %>
+  host: <%= ENV.fetch("DB_HOST") { "main_task_system_db" } %>
 
 development:
   <<: *default
