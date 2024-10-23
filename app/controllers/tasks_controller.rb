@@ -59,7 +59,7 @@ class TasksController < ActionController::API
 
     task.update(
       description: params[:description],
-      task_type: params[:type],
+      task_type: params[:task_type],
       state: params[:state],
       url_for_scraping: params[:url_for_scraping],
     )
