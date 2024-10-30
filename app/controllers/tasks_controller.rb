@@ -10,7 +10,7 @@ class TasksController < ActionController::API
   end
 
   def is_given_token_valid(given_token)
-    authentication_microservice_response = HTTParty.get("http://authentication_microservice_api:5000/users/valid_token?token=#{given_token}")
+    authentication_microservice_response = HTTParty.get("http://authentication_microservice_api:5000/users/get_data?token=#{given_token}")
     authentication_microservice_response.code == 200
   end
 
@@ -19,86 +19,64 @@ class TasksController < ActionController::API
   end
 
   def get_all_tasks
-    tasks = Task.all
+    tasks = UserTask.all + WebScrapingTask.all
     render json: tasks
   end
 
-  def get_a_task
-    task = Task.find(params[:id])
+  # def create
+  #   new_task = Task.new(
+  #     description: params[:description],
+  #     user_id: params[:token],
+  #     state: params[:state],
+  #     task_type: params[:task_type],
+  #     url_for_scraping: params[:url_for_scraping],
+  #   )
 
-    if task
-      render json: task
-    else
-      send_response("Task not found!", 404)
-    end
-  end
+  #   if new_task.save
+  #     send_response("Task created!", 201)
+  #     HTTParty.post('http://notification_microservice_api:2000/send_notification', body: {
+  #       token: params[:token],
+  #       task_description: new_task.description,
+  #       operation: "created",
+  #       task_id: new_task.id,
+  #       scraped_data: "",
+  #     }.to_json, headers: { 'Content-Type' => 'application/json' })
 
-  def create
-    new_task = Task.new(
-      description: params[:description],
-      user_id: params[:token],
-      state: params[:state],
-      task_type: params[:task_type],
-      url_for_scraping: params[:url_for_scraping],
-    )
+  #     if new_task.task_type == "Web Scraping"
+  #       HTTParty.post('http://web_scraping_microservice_api:7000/scrape_data', body: {
+  #         token: params[:token],
+  #         task_id: new_task.id,
+  #         url_for_scraping: new_task.url_for_scraping,
+  #       }.to_json, headers: { 'Content-Type' => 'application/json' })
+  #     end
 
-    if new_task.save
-      send_response("Task created!", 201)
-      HTTParty.post('http://notification_microservice_api:2000/send_notification', body: {
-        token: params[:token],
-        task_description: new_task.description,
-        operation: "created",
-        task_id: new_task.id,
-        scraped_data: "",
-      }.to_json, headers: { 'Content-Type' => 'application/json' })
+  #   else
+  #     send_response("Error creating task!", 500)
+  #   end
+  # end
 
-      if new_task.task_type == "Web Scraping"
-        HTTParty.post('http://web_scraping_microservice_api:7000/scrape_data', body: {
-          token: params[:token],
-          task_id: new_task.id,
-          url_for_scraping: new_task.url_for_scraping,
-        }.to_json, headers: { 'Content-Type' => 'application/json' })
-      end
+  # def edit
+  #   task = Task.find(params[:id])
 
-    else
-      send_response("Error creating task!", 500)
-    end
-  end
+  #   unless task
+  #     send_response("Task not found!", 404)
+  #     return
+  #   end
 
-  def edit
-    task = Task.find(params[:id])
+  #   task.update(
+  #     description: params[:description],
+  #     task_type: params[:task_type],
+  #     state: params[:state],
+  #     url_for_scraping: params[:url_for_scraping],
+  #   )
 
-    unless task
-      send_response("Task not found!", 404)
-      return
-    end
-
-    task.update(
-      description: params[:description],
-      task_type: params[:task_type],
-      state: params[:state],
-      url_for_scraping: params[:url_for_scraping],
-    )
-
-    send_response("Task updated!", 200)
-    HTTParty.post('http://notification_microservice_api:2000/send_notification', body: {
-      token: params[:token],
-      task_description: task.description,
-      operation: "edited",
-      task_id: task.id,
-      scraped_data: "",
-    }.to_json, headers: { 'Content-Type' => 'application/json' })
-  end
-
-  def delete
-    task = Task.find(params[:id])
-
-    unless task
-      send_response("Task not found!", 404)
-      return
-    end
-
-    task.destroy
-    send_response("Task deleted!", 200)
-  end
+  #   send_response("Task updated!", 200)
+  #   HTTParty.post('http://notification_microservice_api:2000/send_notification', body: {
+  #     token: params[:token],
+  #     task_description: task.description,
+  #     operation: "edited",
+  #     task_id: task.id,
+  #     scraped_data: "",
+  #   }.to_json, headers: { 'Content-Type' => 'application/json' })
+  # end
 end
