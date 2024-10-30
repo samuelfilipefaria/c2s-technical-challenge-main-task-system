@@ -5,7 +5,18 @@ services:
     ports:
       - "3306:3306"
     environment:
-      - MYSQL_DATABASE=c2s_technical_challenge_users_tasks
+      - MYSQL_DATABASE=c2s_technical_challenge_tasks
+      - MYSQL_ROOT_PASSWORD=root
+    networks:
+      - main-task-system-network
+
+  main_task_system_db_test:
+    image: mysql
+    restart: always
+    ports:
+      - "9000:3306"
+    environment:
+      - MYSQL_DATABASE=c2s_technical_challenge_tasks_test
       - MYSQL_ROOT_PASSWORD=root
     networks:
       - main-task-system-network
@@ -21,6 +32,7 @@ services:
       - "3000:3000"
     depends_on:
       - main_task_system_db
+      - main_task_system_db_test
     networks:
       - main-task-system-network
 
