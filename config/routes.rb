@@ -8,8 +8,14 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   root "tasks#api_message"
   get "/tasks/get_all_tasks", to: "tasks#get_all_tasks"
-  get "/tasks/get_a_task", to: "tasks#get_a_task"
-  post "/tasks/create", to: "tasks#create"
-  put "/tasks/edit", to: "tasks#edit"
-  delete "/tasks/delete", to: "tasks#delete"
+  
+  post "/user_tasks/create", to: "user_tasks#create"
+  get "/user_tasks/get_a_task", to: "user_tasks#get_a_task"
+  put "/user_tasks/update", to: "user_tasks#update"
+  delete "/user_tasks/delete", to: "user_tasks#delete"
+
+  post "/web_scraping_tasks/create", to: "web_scraping_tasks#create"
+  get "/web_scraping_tasks/get_a_task", to: "web_scraping_tasks#get_a_task"
+  put "/web_scraping_tasks/update", to: "web_scraping_tasks#update"
+  delete "/web_scraping_tasks/delete", to: "web_scraping_tasks#delete"
 end
