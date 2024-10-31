@@ -25,7 +25,7 @@ RSpec.describe GetWebScrapingTaskDataService do
     def get_test_web_scraping_task
       WebScrapingTask.create(
         url_for_scraping: "https://google.com",
-        state: "pendente",
+        state: "pending",
         creator_id: 1
       )
 

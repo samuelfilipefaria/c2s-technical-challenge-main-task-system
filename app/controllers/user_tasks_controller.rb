@@ -21,8 +21,19 @@ class UserTasksController < ActionController::API
   def create
     creator_id = HTTParty.get("http://authentication_microservice_api:5000/users/get_user_id?token=#{params[:token]}")["userId"]
     service = CreateUserTaskService.new(params[:description], params[:state], creator_id)
+    user_task_id = service.perform
 
-    if service.perform
+    if user_task_id
+      HTTParty.post(
+        "http://notification_microservice_api:2000/create_user_action_notification",
+        body: {
+          token: params[:token],
+          user_action: "created",
+          user_task_id: user_task_id,
+        }.to_json,
+        headers: { 'Content-Type' => 'application/json' }
+      )
+
       send_response("Task created!", 201)
     else
       send_response("Error creating task!", 500)
@@ -51,6 +62,16 @@ class UserTasksController < ActionController::API
     )
 
     if service.perform
+      HTTParty.post(
+        "http://notification_microservice_api:2000/create_user_action_notification",
+        body: {
+          token: params[:token],
+          user_action: "updated",
+          user_task_id: params[:user_task_id],
+        }.to_json,
+        headers: { 'Content-Type' => 'application/json' }
+      )
+
       send_response("User task updated!", 200)
     else
       send_response("Error updating user task!", 500)
@@ -63,6 +84,15 @@ class UserTasksController < ActionController::API
     )
 
     if service.perform
+      HTTParty.delete(
+        "http://notification_microservice_api:2000/delete_all_notifications_related_to_user_task",
+        body: {
+          token: params[:token],
+          user_task_id: params[:user_task_id],
+        }.to_json,
+        headers: { 'Content-Type' => 'application/json' }
+      )
+
       send_response("User task deleted!", 200)
     else
       send_response("Error deleting user task!", 500)

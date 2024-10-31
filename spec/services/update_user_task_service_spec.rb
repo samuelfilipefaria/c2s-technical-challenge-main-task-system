@@ -9,14 +9,14 @@ RSpec.describe UpdateUserTaskService do
         subject = described_class.new(
           user_task.id,
           "Outra task",
-          "em progresso",
+          "in progress",
         )
 
         subject.perform
         user_task.reload
         
         expect(user_task.description).to eq("Outra task")
-        expect(user_task.state).to eq("em progresso")
+        expect(user_task.state).to eq("in progress")
         expect(user_task.creator_id).to eq(1)
       end
     end
@@ -34,7 +34,7 @@ RSpec.describe UpdateUserTaskService do
         user_task.reload
         
         expect(user_task.description).to eq("Outra task")
-        expect(user_task.state).to eq("pendente")
+        expect(user_task.state).to eq("pending")
         expect(user_task.creator_id).to eq(1)
       end
     end
@@ -46,14 +46,14 @@ RSpec.describe UpdateUserTaskService do
         subject = described_class.new(
           user_task.id,
           nil,
-          "em progresso"
+          "in progress"
         )
 
         subject.perform
         user_task.reload
         
         expect(user_task.description).to eq("Minha task")
-        expect(user_task.state).to eq("em progresso")
+        expect(user_task.state).to eq("in progress")
         expect(user_task.creator_id).to eq(1)
       end
     end
@@ -65,7 +65,7 @@ RSpec.describe UpdateUserTaskService do
         subject = described_class.new(
           user_task.id,
           "",
-          "em progresso"
+          "in progress"
         )
 
         expect { subject.perform }.to raise_error(ArgumentError)
@@ -78,7 +78,7 @@ RSpec.describe UpdateUserTaskService do
 
         UserTask.create(
           description: "Outra task",
-          state: "pendente",
+          state: "pending",
           creator_id: 1
         )
 
@@ -112,7 +112,7 @@ RSpec.describe UpdateUserTaskService do
         subject = described_class.new(
           nil,
           "Outra task",
-          "em progresso"
+          "in progress"
         )
 
         expect { subject.perform }.to raise_error
@@ -126,7 +126,7 @@ RSpec.describe UpdateUserTaskService do
         subject = described_class.new(
           user_task.id * -1,
           "Outra task",
-          "em progresso"
+          "in progress"
         )
 
         expect { subject.perform }.to raise_error
@@ -155,7 +155,7 @@ RSpec.describe UpdateUserTaskService do
     def get_test_user_task
       UserTask.create(
         description: "Minha task",
-        state: "pendente",
+        state: "pending",
         creator_id: 1
       )
 

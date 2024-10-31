@@ -15,6 +15,8 @@ class CreateUserTaskService
       state: state,
       creator_id: creator_id
     )
+
+    UserTask.last.id
   end
 
   private

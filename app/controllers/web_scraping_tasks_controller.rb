@@ -21,8 +21,20 @@ class WebScrapingTasksController < ActionController::API
   def create
     creator_id = HTTParty.get("http://authentication_microservice_api:5000/users/get_user_id?token=#{params[:token]}")["userId"]
     service = CreateWebScrapingTaskService.new(params[:url_for_scraping], params[:state], creator_id)
+    web_scraping_task_id = service.perform
+    
+    if web_scraping_task_id
+      HTTParty.post(
+        "http://web_scraping_microservice_api:7000/web_scraping/web_motors",
+        read_timeout: 300,
+        body: {
+          token: params[:token],
+          web_scraping_task_id: web_scraping_task_id,
+          url_for_scraping: params[:url_for_scraping],
+        }.to_json,
+        headers: { 'Content-Type' => 'application/json' }
+      )
 
-    if service.perform
       send_response("Task created!", 201)
     else
       send_response("Error creating task! The data provided was repeated or invalid, please check and try again.", 500)
@@ -31,7 +43,7 @@ class WebScrapingTasksController < ActionController::API
 
   def get_a_task
     service = GetWebScrapingTaskDataService.new(
-      params[:task_id]
+      params[:web_scraping_task_id]
     )
 
     user_task = service.perform
@@ -45,9 +57,8 @@ class WebScrapingTasksController < ActionController::API
 
   def update
     service = UpdateWebScrapingTaskService.new(
-      params[:url_for_scraping],
-      params[:state],
-      params[:creator_id]
+      params[:web_scraping_task_id],
+      params[:state]
     )
 
     if service.perform
@@ -63,6 +74,15 @@ class WebScrapingTasksController < ActionController::API
     )
 
     if service.perform
+      HTTParty.delete(
+        "http://notification_microservice_api:2000/delete_all_notifications_related_to_web_scraping_task",
+        body: {
+          token: params[:token],
+          web_scraping_task_id: params[:web_scraping_task_id],
+        }.to_json,
+        headers: { 'Content-Type' => 'application/json' }
+      )
+
       send_response("User task deleted!", 200)
     else
       send_response("Error deleting user task!", 500)

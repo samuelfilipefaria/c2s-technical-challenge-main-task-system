@@ -25,7 +25,7 @@ RSpec.describe GetUserTaskDataService do
     def get_test_user_task
       UserTask.create(
         description: "Minha task",
-        state: "pendente",
+        state: "pending",
         creator_id: 1
       )
 

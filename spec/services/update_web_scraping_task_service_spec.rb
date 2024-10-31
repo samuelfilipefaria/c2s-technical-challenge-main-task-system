@@ -8,14 +8,14 @@ RSpec.describe UpdateWebScrapingTaskService do
 
         subject = described_class.new(
           web_scraping_task.id,
-          "em progresso",
+          "in progress",
         )
 
         subject.perform
         web_scraping_task.reload
         
         expect(web_scraping_task.url_for_scraping).to eq(web_scraping_task.url_for_scraping)
-        expect(web_scraping_task.state).to eq("em progresso")
+        expect(web_scraping_task.state).to eq("in progress")
         expect(web_scraping_task.creator_id).to eq(1)
       end
     end
@@ -80,7 +80,7 @@ RSpec.describe UpdateWebScrapingTaskService do
     def get_test_web_scraping_task
       WebScrapingTask.create(
         url_for_scraping: "https://google.com",
-        state: "pendente",
+        state: "pending",
         creator_id: 1
       )
 

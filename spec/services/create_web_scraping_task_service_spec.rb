@@ -4,7 +4,7 @@ RSpec.describe CreateWebScrapingTaskService do
   subject {
     described_class.new(
       "https://google.com",
-      "pendente",
+      "pending",
       1
     )
   }
@@ -34,7 +34,7 @@ RSpec.describe CreateWebScrapingTaskService do
       it "raises an error" do
         WebScrapingTask.create(
           url_for_scraping: "https://google.com",
-          state: "pendente",
+          state: "pending",
           creator_id: 1
         )
 

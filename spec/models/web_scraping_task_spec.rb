@@ -4,7 +4,7 @@ RSpec.describe WebScrapingTask, type: :model do
   subject {
     described_class.new(
       url_for_scraping: "https://google.com",
-      state: "pendente",
+      state: "pending",
       creator_id: 1
     )
   }

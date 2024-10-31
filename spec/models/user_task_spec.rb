@@ -4,7 +4,7 @@ RSpec.describe UserTask, type: :model do
   subject {
     described_class.new(
       description: "https://google.com",
-      state: "pendente",
+      state: "pending",
       creator_id: 1
     )
   }

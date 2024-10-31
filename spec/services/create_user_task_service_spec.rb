@@ -4,7 +4,7 @@ RSpec.describe CreateUserTaskService do
   subject {
     described_class.new(
       "Minha task",
-      "pendente",
+      "pending",
       1
     )
   }
@@ -34,7 +34,7 @@ RSpec.describe CreateUserTaskService do
       it "raises an error" do
         UserTask.create(
           description: "Minha task",
-          state: "pendente",
+          state: "pending",
           creator_id: 1
         )
 

@@ -15,6 +15,8 @@ class CreateWebScrapingTaskService
       state: state,
       creator_id: creator_id
     )
+
+    WebScrapingTask.last.id
   end
 
   private

@@ -25,7 +25,7 @@ RSpec.describe DeleteWebScrapingTaskService do
     def get_test_web_scraping_task
       WebScrapingTask.create(
         url_for_scraping: "Minha task",
-        state: "pendente",
+        state: "pending",
         creator_id: 1
       )
 

@@ -20,7 +20,14 @@ class TasksController < ActionController::API
 
   def get_all_tasks
     tasks = UserTask.all + WebScrapingTask.all
-    render json: tasks
+    tasks.sort_by! {|task| task[:created_at]}
+    tasks.reverse!
+
+    if tasks
+      render json: {tasks: tasks}, status: 200
+    else
+      send_response("Error getting tasks!", 500)
+    end
   end
 
   # def create
