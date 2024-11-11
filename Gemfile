@@ -42,4 +42,4 @@ group :development, :test do
   gem "rubocop-rails-omakase", require: false
 end
 
-gem "rspec-rails", "~> 7.0"
+gem "rspec-rails", "~> 7.1"
